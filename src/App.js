@@ -1,55 +1,58 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import { fetcher } from "./fetcher";
+import { getCategories, getProducts } from "./fetcher";
 import Category from "./components/Category";
+import CategoryProduct from "./components/CategoryProduct";
 
 function App() {
-  const [categories, setCategories] = useState([]);
-  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState({ errorMessage: "", data: [] });
+  const [products, setProducts] = useState({ errorMessage: "", data: [] });
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetcher("/categories");
-      setCategories(data);
-    }
+      const responseData = await getCategories();
+      setCategories(responseData);
+    };
     fetchData();
   }, []);
 
   const handleCategoryClick = (id) => {
-    fetch("http://localhost:3001/products?=" + id)
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts(data);
-      });
+    const fetchData = async () => {
+      const responseData = await getProducts(id);
+      setProducts(responseData);
+    };
+    fetchData();
   };
 
   const renderCategory = () => {
-    return categories.map((result) => (
+    return categories.data.map((result) => (
       <Category
         key={result.id}
         id={result.id}
         title={result.title}
-        onCategoryClick={() => handleCategoryClick(result.id)}
+        onCategoryClick={handleCategoryClick}
       />
     ));
   };
 
   const renderProducts = () => {
-    return products.map((result) => (
-      <div key={result.id}>
-        <p>{result.title}</p>
-      </div>
+    return products.data.map((result) => (
+      <CategoryProduct key={result.id} {...result}> {result.title}</CategoryProduct>
     ));
-  }
+  };
   return (
     <>
       <header>My Store</header>
-      <section>
-        <nav>{categories && renderCategory()}</nav>
+      <main>
+        <nav>
+          {categories.errorMessage && <div>{categories.errorMessage}</div>}
+          {categories.data && renderCategory()}
+        </nav>
         <article>
           <h1>Products </h1>
+          {products.errorMessage && <div>{products.errorMessage}</div>}
           {products && renderProducts()}
         </article>
-      </section>
+      </main>
       <footer>My Footer</footer>
     </>
   );
