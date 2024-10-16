@@ -1,29 +1,63 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
-const CategoryProduct = ({ title, image, specs, features, price, stock }) => {
+const ProductTitle = styled.div`
+  grid-column: 1 / span 3;
+  color: darkslategray;
+  font-weight: bold;
+  font-size: 1.5em;
+  padding-left: 10px;
+`;
+
+const ProductImageContainer = styled.div`
+  padding: 10px;
+  width: 60%;
+`;
+
+const ProductImageContainerImg = styled.img`
+  width: 100%;
+  height: 100%;
+`;
+
+const ProductInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const CategoryProduct = ({
+  id,
+  title,
+  image,
+  specs,
+  features,
+  price,
+  stock,
+}) => {
+  const navigate = useNavigate();
   return (
     <article>
-      <div className="category-product-title">
-        <h1>{title}</h1>
-      </div>
+      <ProductTitle>
+        <Link to={`products/${id}`}>{title}</Link>
+      </ProductTitle>
 
       <figure>
-        <div className="category-product-image-container">
-          <img src={`./assets/${image}`} alt="{title}" />
-        </div>
+        <ProductImageContainer>
+          <ProductImageContainerImg src={`./assets/${image}`} alt="{title}" />
+        </ProductImageContainer>
       </figure>
 
       <aside>
-        <div className="category-product-info-dimensions">
+        <ProductInfo>
           <h3>Dimensions</h3>
           <label>{specs.dimensions}</label>
-        </div>
+        </ProductInfo>
 
         {specs.capacity && (
-          <div className="category-product-info-capacity">
+          <ProductInfo >
             <h3>Capacity</h3>
             <label>{specs.capacity}</label>
-          </div>
+          </ProductInfo>
         )}
 
         <div className="category-product-info-features">
@@ -43,7 +77,9 @@ const CategoryProduct = ({ title, image, specs, features, price, stock }) => {
           </div>
 
           <div className="category-product-action">
-            <button>View Product</button>
+            <button onClick={() => navigate(`products/${id}`)}>
+              View Product
+            </button>
             <button>ADD TO BASKET</button>
           </div>
         </aside>
