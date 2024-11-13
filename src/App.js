@@ -1,12 +1,19 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import { getCategories, getProducts } from "./fetcher";
+import { getCategories } from "./fetcher";
+
+import ProductDetail from "./components/ProductDetail";
+import Basket from "./components/Basket";
+import Checkout from "./components/Checkout";
 import Category from "./components/Category";
-import CategoryProduct from "./components/CategoryProduct";
+import Layout from "./components/Layout";
+import Home from "./components/Home";
+
+import { Route, BrowserRouter, Routes } from "react-router-dom";
 
 function App() {
   const [categories, setCategories] = useState({ errorMessage: "", data: [] });
-  const [products, setProducts] = useState({ errorMessage: "", data: [] });
+
   useEffect(() => {
     const fetchData = async () => {
       const responseData = await getCategories();
@@ -15,45 +22,20 @@ function App() {
     fetchData();
   }, []);
 
-  const handleCategoryClick = (id) => {
-    const fetchData = async () => {
-      const responseData = await getProducts(id);
-      setProducts(responseData);
-    };
-    fetchData();
-  };
-
-  const renderCategory = () => {
-    return categories.data.map((result) => (
-      <Category
-        key={result.id}
-        id={result.id}
-        title={result.title}
-        onCategoryClick={handleCategoryClick}
-      />
-    ));
-  };
-
-  const renderProducts = () => {
-    return products.data.map((result) => (
-      <CategoryProduct key={result.id} {...result}> {result.title}</CategoryProduct>
-    ));
-  };
   return (
     <>
-      <header>My Store</header>
-      <main>
-        <nav>
-          {categories.errorMessage && <div>{categories.errorMessage}</div>}
-          {categories.data && renderCategory()}
-        </nav>
-        <article>
-          <h1>Products </h1>
-          {products.errorMessage && <div>{products.errorMessage}</div>}
-          {products && renderProducts()}
-        </article>
-      </main>
-      <footer>My Footer</footer>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout categories={categories}></Layout>}>
+            <Route index element={<Home />} />
+            {/* <Route path="*" element={<h1>Not Found</h1>} /> */}
+            <Route path="products/:id" element={<ProductDetail />} />
+            <Route path="categories/:id" element={<Category />} />
+            <Route path="basket" element={<Basket />} />
+            <Route path="checkout" element={<Checkout />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }

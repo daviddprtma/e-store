@@ -43,7 +43,7 @@ const CategoryProduct = ({
 
       <figure>
         <ProductImageContainer>
-          <ProductImageContainerImg src={`./assets/${image}`} alt="{title}" />
+          <ProductImageContainerImg src={`/assets/${image}`} alt="{title}" />
         </ProductImageContainer>
       </figure>
 
@@ -54,7 +54,7 @@ const CategoryProduct = ({
         </ProductInfo>
 
         {specs.capacity && (
-          <ProductInfo >
+          <ProductInfo>
             <h3>Capacity</h3>
             <label>{specs.capacity}</label>
           </ProductInfo>

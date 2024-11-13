@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getProductsById } from "../fetcher";
+import styled from "styled-components";
 
 const ProductDetail = () => {
   const [product, setProducts] = useState({ errorMessage: "", data: [] });
   const { id } = useParams();
+  const createMarkup = () => {
+    return { __html: product.data?.description };
+  };
   useEffect(() => {
     const fetchData = async () => {
       const responseData = await getProductsById(id);
@@ -62,7 +66,9 @@ const ProductDetail = () => {
               <button>ADD TO BASKET</button>
             </div>
           </aside>
-          <div>{product.data?.description}</div>
+          <ProductDescription
+            dangerouslySetInnerHTML={createMarkup()}
+          ></ProductDescription>
         </aside>
       </article>
     </div>
@@ -70,3 +76,7 @@ const ProductDetail = () => {
 };
 
 export default ProductDetail;
+
+const ProductDescription = styled.div`
+  grid-column: 1 / span 3;
+`;
