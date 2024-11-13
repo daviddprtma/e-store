@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { cartContext } from "../contexts/cartContext";
 
 const ProductTitle = styled.div`
   grid-column: 1 / span 3;
@@ -35,10 +36,12 @@ const CategoryProduct = ({
   stock,
 }) => {
   const navigate = useNavigate();
+  const cartcontext = useContext(cartContext);
+  const { addProduct } = cartcontext;
   return (
     <article>
       <ProductTitle>
-        <Link to={`products/${id}`}>{title}</Link>
+        <Link to={`/products/${id}`}>{title}</Link>
       </ProductTitle>
 
       <figure>
@@ -77,10 +80,16 @@ const CategoryProduct = ({
           </div>
 
           <div className="category-product-action">
-            <button onClick={() => navigate(`products/${id}`)}>
+            <button onClick={() => navigate(`/products/${id}`)}>
               View Product
             </button>
-            <button>ADD TO BASKET</button>
+            <button
+              onClick={() =>
+                addProduct({ id, title, image, specs, features, price, stock })
+              }
+            >
+              ADD TO BASKET
+            </button>
           </div>
         </aside>
       </aside>
