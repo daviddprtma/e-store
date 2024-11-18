@@ -36,8 +36,7 @@ const CategoryProduct = ({
   stock,
 }) => {
   const navigate = useNavigate();
-  const cartcontext = useContext(cartContext);
-  const { addProduct } = cartcontext;
+  const { addProduct } = useContext(cartContext);
   return (
     <article>
       <ProductTitle>
