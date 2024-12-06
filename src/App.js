@@ -10,6 +10,8 @@ import Layout from "./components/Layout";
 import Home from "./components/Home";
 
 import { Route, BrowserRouter, Routes } from "react-router-dom";
+import OrderConfirmation from "./components/OrderConfirmation";
+import SearchResults from "./components/SearchResults";
 
 function App() {
   const [categories, setCategories] = useState({ errorMessage: "", data: [] });
@@ -33,6 +35,8 @@ function App() {
             <Route path="categories/:id" element={<Category />} />
             <Route path="basket" element={<Basket />} />
             <Route path="checkout" element={<Checkout />} />
+            <Route path="orderconfirmation" element={<OrderConfirmation />} />
+            <Route path="search" element={<SearchResults />} />
           </Route>
         </Routes>
       </BrowserRouter>
